@@ -1,0 +1,20 @@
+<h1>Sign Up</h1>
+<form action="">
+  <label for="username">Username:</label>
+  <input type="text" name="username" id="username" placeholder="username" />
+  <label for="password">Password:</label>
+  <input type="text" name="password" id="password" placeholder="password" />
+  <label for="confirm">Confirm Password:</label>
+  <input
+    type="text"
+    name="confirm"
+    id="confirm"
+    placeholder="Confirm Password"
+  />
+  <button type="submit">Register</button>
+</form>
+<div>
+    <% if( typeof error !== "undefined") { %>
+        <p> <%= error %> </p>
+    <% } %>
+</div>
