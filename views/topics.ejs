@@ -1,0 +1,13 @@
+<div>
+    <% if(locals.topics) { %>
+        <ul>
+            <% locals.topics.forEach(topic => { %>
+                <li>
+                    <p>topic.title</p>
+                    <p>topic.username</p>
+                    <p>topic.timestamp</p>
+                </li>
+            <% }) %>
+        </ul>
+    <% } %>
+</div>

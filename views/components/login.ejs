@@ -1,0 +1,18 @@
+<div class="login">
+    <h3>Please log in</h3>
+    <%- include('error', {error: locals.error}) %>
+    <form action="/log-in" method="POST">
+        <div>
+            <label for="username">Username</label>
+            <input id="username" name="username" placeholder="username" type="text" />
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" placeholder="password" />
+        </div>
+      <button>Log In</button>
+    </form>
+    <a href="/sign-up">
+        <h1>Or sign up</h1>
+    </a>
+</div>

@@ -1,0 +1,13 @@
+<div>
+    <% if(locals.chat) { %>
+        <ul>
+            <% locals.chat.forEach(message => { %>
+                <li>
+                    <p>message.username</p>
+                    <p>message.timestamp</p>
+                    <p>message.content</p>
+                </li>
+            <% }) %>
+        </ul>
+    <% } %>
+</div>
