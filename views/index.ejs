@@ -1,39 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" type="text/css" href="/style.css">
-  <title>Home Page</title>
-</head>
-<body>
-  <header>
-    <nav class="test">
-      <a href="/chat">
-        <p>Chat</p>
-      </a>
-      <div>
-        <% if (locals.user) {%>
-          <h1>WELCOME BACK <%= user.username %></h1>
-          <% if (!locals.user.membership) { %>
-            <p>Would you like to become a member?</p>
-            <p>If so, please include the secret password!</p>
-            <form action="/upgrade" method="post">
-              <input type="hidden" name="id" value="<%= locals.user.id %>">
-              <label for="secret">Secret:</label>
-              <input type="text" name="secret" id="secret">
-              <button type="submit">Become a member!</button>
-            </form>
-            <%- include('components/error', {error: locals.error}) %>
-          <% } else {%>
-              <h3>Welcome to the illuminati!</h3>
-          <% } %>
-          <a href="/log-out">LOG OUT</a>
-        <% } else { %>
-          <%- include("components/login") %>
-        <%}%>
-      </div>
-    </nav>
-  </header>
-  <h1>CONTENT</h1>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <title>The Tavern</title>
+  </head>
+  <body>
+    <header><%- include("components/nav") %></header>
+
+    <main>
+      <h1>CONTENT</h1>
+    </main>
+  </body>
 </html>

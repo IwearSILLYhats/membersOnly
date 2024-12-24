@@ -1,0 +1,24 @@
+<nav class="test">
+    <h2>The Tavern</h2>
+    <div>
+      <% if (locals.user) {%>
+        <h1>WELCOME BACK <%= user.username %></h1>
+        <% if (!locals.user.membership) { %>
+          <p>Would you like to become a member?</p>
+          <p>If so, please include the secret password!</p>
+          <form action="/upgrade" method="post">
+            <input type="hidden" name="id" value="<%= locals.user.id %>">
+            <label for="secret">Secret:</label>
+            <input type="text" name="secret" id="secret">
+            <button type="submit">Become a member!</button>
+          </form>
+          <%- include('error') %>
+        <% } else {%>
+            <h3>Welcome to the illuminati!</h3>
+        <% } %>
+        <a href="/log-out">LOG OUT</a>
+      <% } else { %>
+        <%- include("login") %>
+      <%}%>
+    </div>
+  </nav>
