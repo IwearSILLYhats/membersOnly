@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <title>Create a Topic</title>
+</head>
+<body>
+    <header>
+        <%- include("components/nav") %>
+      </header>
+    <main>
+        <% if( locals.currentUser  && currentUser.membership ) { %>
+        <form action="" method="post">
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" name="title" id="title" value="<%= locals?.topic?.title || '' %>">
+            </div>
+            <div>
+                <label for="content">Message:</label>
+                <textarea name="content" id="content">
+                    <%= locals?.topic?.content || "" %>
+                </textarea>
+            </div>
+            <input type="hidden" name="userid" value="<%= currentUser?.userid || '' %>">
+            <button type="submit">Submit</button>
+        </form>
+        <% } else { %>
+            <p>Sorry, you need to be a verified member to post new topics. Please sign up and validate above!</p>
+        <% } %>
+    </main>
+</body>
+</html>

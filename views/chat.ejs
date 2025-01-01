@@ -1,13 +1,30 @@
-<div>
-    <% if(locals.chat) { %>
-        <ul>
-            <% locals.chat.forEach(message => { %>
-                <li>
-                    <p>message.username</p>
-                    <p>message.timestamp</p>
-                    <p>message.content</p>
-                </li>
-            <% }) %>
-        </ul>
-    <% } %>
-</div>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <title>Create a Topic</title>
+</head>
+<body>
+    <header>
+        <%- include("components/nav") %>
+      </header>
+    <main>
+        <div>
+            <% if(locals.chat) { %>
+                <ul>
+                    <% locals.chat.forEach(message => { %>
+                        <li>
+                            <p>message.username</p>
+                            <p>message.timestamp</p>
+                            <p>message.content</p>
+                        </li>
+                    <% }) %>
+                </ul>
+            <% } %>
+        </div>
+    </main>
+</body>
+</html>

@@ -115,8 +115,8 @@ app.post("/sign-up", async (req, res, next) => {
     bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
       if (err) throw err;
       await pool.query(
-        "INSERT INTO users (username, password, fname, lname, membership, admin) VALUES ($1, $2, null, null, false, false)",
-        [newUser.username, hashedPassword],
+        "INSERT INTO users (username, password, fname, lname, membership, admin) VALUES ($1, $2, $3, $4, false, false)",
+        [newUser.username, hashedPassword, newUser.fName, newUser.lName],
       );
     });
     res.redirect("/");
@@ -154,16 +154,47 @@ app.post("/upgrade", async (req, res) => {
           SET
             membership = true
           WHERE
-            id = $1`,
+            userid = $1`,
       values: [req.body.id],
     });
+    res.redirect("/");
   } else {
-    res.render("index", { user: req.user, error: "Sucks to suck" });
+    res.render("index", { error: ["Sucks to suck"] });
   }
 });
 
-app.get("/", (req, res) => {
-  res.render("index", { user: req.user, error: req.session.messages });
+app.get("/topics/create", (req, res) => {
+  console.log(req?.user);
+  res.render("topicForm");
+});
+
+app.post("/topics/create", async (req, res) => {
+  await pool.query({
+    text: `
+    INSERT INTO
+      topics 
+        (title, timestamp, content, author)
+      VALUES
+        ($1, NOW(), $2, $3)`,
+    values: [req.body.title, req.body.content, req.body.userid]
+  });
+  res.redirect("/");
+});
+
+app.get("/", async (req, res) => {
+  const { rows } = await pool.query({
+    text: `
+    SELECT
+      *
+    FROM
+      topics
+    LEFT JOIN
+      users
+    ON
+      userid = author`,
+    values: []
+  })
+  res.render("index", { topics: rows, error: req.session.messages });
 });
 
 app.listen(3000, () =>
