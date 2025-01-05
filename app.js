@@ -205,6 +205,10 @@ app.get("/chat/:id", async ( req, res ) => {
           *
         FROM
           topics
+        JOIN
+          users
+        ON
+          author = userid
         WHERE
           topicid = $1`,
       values: [req.params.id]
@@ -229,6 +233,10 @@ app.get("/chat/:id", async ( req, res ) => {
   } else {
     res.redirect("/")
   }
+});
+
+app.post("/post/create", ( res, req ) => {
+  
 })
 
 app.listen(3000, () =>
