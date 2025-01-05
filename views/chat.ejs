@@ -12,14 +12,18 @@
         <%- include("components/nav") %>
       </header>
     <main>
+        <h1>topic.title</h1>
         <div>
-            <% if(locals.chat) { %>
+            <div>
+                <h3>topic</h3>
+            </div>
+            <% if(locals.posts) { %>
                 <ul>
-                    <% locals.chat.forEach(message => { %>
+                    <% locals.posts.forEach(post => { %>
                         <li>
-                            <p>message.username</p>
-                            <p>message.timestamp</p>
-                            <p>message.content</p>
+                            <p>post.username</p>
+                            <p>post.timestamp</p>
+                            <p>post.content</p>
                         </li>
                     <% }) %>
                 </ul>

@@ -197,6 +197,40 @@ app.get("/", async (req, res) => {
   res.render("index", { topics: rows, error: req.session.messages });
 });
 
+app.get("/chat/:id", async ( req, res ) => {
+  const [topic, posts] = await Promise.all([
+    pool.query({
+      text: `
+        SELECT
+          *
+        FROM
+          topics
+        WHERE
+          topicid = $1`,
+      values: [req.params.id]
+    }),
+    pool.query({
+    text: `
+      SELECT
+        *
+      FROM
+        posts
+      WHERE
+        topic = $1
+        `,
+    values: [req.params.id]
+  })]);
+
+  if(topic !== null) {
+    res.render('chat', {
+      topic: topic.rows[0],
+      posts: posts.rows
+    })
+  } else {
+    res.redirect("/")
+  }
+})
+
 app.listen(3000, () =>
   console.log(`app listening on port ${process.env.PORT}`),
 );
