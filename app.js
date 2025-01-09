@@ -309,6 +309,6 @@ app.post("/post/delete/:id", async (req, res, next) => {
   }
 });
 
-app.listen(3000, () =>
+app.listen(process.env.PORT, () =>
   console.log(`app listening on port ${process.env.PORT}`),
 );
