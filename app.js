@@ -164,7 +164,6 @@ app.post("/upgrade", async (req, res) => {
 });
 
 app.get("/topics/create", (req, res) => {
-  console.log(req?.user);
   res.render("topicForm");
 });
 
@@ -176,7 +175,7 @@ app.post("/topics/create", async (req, res) => {
         (title, timestamp, content, author)
       VALUES
         ($1, NOW(), $2, $3)`,
-    values: [req.body.title, req.body.content, req.body.userid]
+    values: [req.body.title, req.body.content, req.body.userid],
   });
   res.redirect("/");
 });
@@ -192,12 +191,12 @@ app.get("/", async (req, res) => {
       users
     ON
       userid = author`,
-    values: []
-  })
+    values: [],
+  });
   res.render("index", { topics: rows, error: req.session.messages });
 });
 
-app.get("/chat/:id", async ( req, res ) => {
+app.get("/chat/:id", async (req, res) => {
   const [topic, posts] = await Promise.all([
     pool.query({
       text: `
@@ -211,33 +210,104 @@ app.get("/chat/:id", async ( req, res ) => {
           author = userid
         WHERE
           topicid = $1`,
-      values: [req.params.id]
+      values: [req.params.id],
     }),
     pool.query({
-    text: `
+      text: `
       SELECT
         *
       FROM
         posts
+      JOIN
+        users
+      ON
+        author = userid
       WHERE
         topic = $1
         `,
-    values: [req.params.id]
-  })]);
+      values: [req.params.id],
+    }),
+  ]);
 
-  if(topic !== null) {
-    res.render('chat', {
+  if (topic !== null) {
+    res.render("chat", {
       topic: topic.rows[0],
-      posts: posts.rows
-    })
+      posts: posts.rows,
+    });
   } else {
-    res.redirect("/")
+    res.redirect("/");
   }
 });
 
-app.post("/post/create", ( res, req ) => {
-  
-})
+app.post("/post/create", async (req, res, next) => {
+  try {
+    await pool.query({
+      text: `
+        INSERT INTO
+          posts
+            (topic, author, content, timestamp)
+          VALUES
+            ($1, $2, $3, NOW())`,
+      values: [req.body.topicid, req.body.userid, req.body.message],
+    });
+    res.redirect(`/chat/${req.body.topicid}`);
+  } catch (error) {
+    console.log(error);
+    res.redirect("/");
+    return next(error);
+  }
+});
+
+app.post("/topic/delete/:id", async (req, res, next) => {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+    await pool.query({
+      text: `
+        DELETE FROM
+          posts
+        WHERE
+          topic = $1`,
+      values: [req.params.id],
+    });
+    await pool.query({
+      text: `
+        DELETE FROM
+          topics
+        WHERE
+          topicid = $1`,
+      values: [req.params.id],
+    });
+
+    await client.query("COMMIT");
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.log(error);
+    return next(error);
+  } finally {
+    client.release();
+    res.redirect(`/`);
+  }
+});
+
+app.post("/post/delete/:id", async (req, res, next) => {
+  try {
+    await pool.query({
+      text: `
+        DELETE FROM
+          posts
+        WHERE
+          postid = $1`,
+      values: [req.params.id],
+    });
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  } finally {
+    res.redirect(`/chat/${req.body.topicid}`);
+  }
+});
 
 app.listen(3000, () =>
   console.log(`app listening on port ${process.env.PORT}`),

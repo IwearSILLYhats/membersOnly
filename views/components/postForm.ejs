@@ -1,6 +1,7 @@
 <form action="/post/create" method="post">
-    <input type="hidden" name="topicid" value="<%= topic.topicid %>">
-    <label for="message">Message:</label>
-    <textarea name="message" id="message"></textarea>
-    <button type="submit">Reply</button>
+  <input type="hidden" name="topicid" value="<%= topic.topicid %>" />
+  <input type="hidden" name="userid" value="<%= currentUser?.userid || '' %>" />
+  <label for="message">Message:</label>
+  <textarea name="message" id="message"></textarea>
+  <button type="submit">Reply</button>
 </form>

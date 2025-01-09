@@ -11,6 +11,11 @@
                     </a>
                     <p>By: <%= locals?.currentUser?.membership ?  topic.username : "Anonymous" %></p>
                     <p><%= topic.timestamp %></p>
+                    <% if(locals?.currentUser?.admin) { %>
+                        <form action="/topic/delete/<%= topic.topicid %>" method="post">
+                            <button type="submit">Admin: Delete this topic?</button>
+                        </form>
+                    <% } %>
                 </li>
             <% }) %>
         </ul>
